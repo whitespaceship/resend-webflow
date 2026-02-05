@@ -28,9 +28,9 @@ const email = payload.data.Email;
 
   try {
     const { data, error } = await resend.emails.send({
-      from: 'onboarding@atomicbot.ai',
+      from: 'Atomic Bot Team <team@atomicbot.ai>',
       to: email,
-      subject: 'Early access confirmed',
+      subject: '✅ +1 Atomic Bot! You’re on the early access list.',
       html: `
 <!doctype html>
 <html lang="en">
