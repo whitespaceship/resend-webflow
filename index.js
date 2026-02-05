@@ -13,7 +13,8 @@ const unsubscribed = new Set();
 app.post('/webhook', async (req, res) => {
   console.log('Получен webhook:', req.body);
 
-  const { email } = req.body;
+const { payload } = req.body;
+const email = payload.data.Email;
 
   if (!email) {
     return res.status(400).json({ error: 'Email обязателен' });
