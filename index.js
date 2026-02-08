@@ -9,9 +9,6 @@ const AUDIENCE_ID = process.env.RESEND_AUDIENCE_ID;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Список отписавшихся
-const unsubscribed = new Set();
-
 app.post('/webhook', async (req, res) => {
   console.log('Получен webhook:', req.body);
 
@@ -22,18 +19,13 @@ app.post('/webhook', async (req, res) => {
     return res.status(400).json({ error: 'Email обязателен' });
   }
 
-  // Проверка на отписку
-  if (unsubscribed.has(email)) {
-    console.log('Пропущен (отписался):', email);
-    return res.status(200).json({ skipped: true });
-  }
-
   try {
     // Добавляем контакт в сегмент waitlist users
     if (AUDIENCE_ID) {
       try {
         const contactResult = await resend.contacts.create({
           email,
+          unsubscribed: false,
           audienceId: AUDIENCE_ID,
         });
         console.log('Контакт добавлен в audience:', contactResult);
@@ -218,33 +210,49 @@ app.get('/test-dark', async (req, res) => {
   }
 });
 
-// Страница отписки
-app.get('/unsubscribe', (req, res) => {
+// Страница отписки — помечает контакт как unsubscribed в Resend
+app.get('/unsubscribe', async (req, res) => {
   const { email } = req.query;
 
-  if (email) {
-    unsubscribed.add(email);
-    console.log('Отписался:', email);
-
-    res.send(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <title>Unsubscribed</title>
-        <style>
-          body { font-family: system-ui; max-width: 400px; margin: 100px auto; text-align: center; }
-        </style>
-      </head>
-      <body>
-        <h1>✓ Unsubscribed</h1>
-        <p>You won't receive more emails from Atomic Bot.</p>
-      </body>
-      </html>
-    `);
-  } else {
-    res.send('Invalid link');
+  if (!email) {
+    return res.send('Invalid link');
   }
+
+  try {
+    if (AUDIENCE_ID) {
+      // Находим контакт в audience и помечаем как отписанного
+      const contacts = await resend.contacts.list({ audienceId: AUDIENCE_ID });
+      const contact = contacts.data?.data?.find(c => c.email === email);
+
+      if (contact) {
+        await resend.contacts.update({
+          id: contact.id,
+          audienceId: AUDIENCE_ID,
+          unsubscribed: true,
+        });
+      }
+    }
+    console.log('Отписался через Resend:', email);
+  } catch (err) {
+    console.error('Ошибка отписки:', err);
+  }
+
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <title>Unsubscribed</title>
+      <style>
+        body { font-family: system-ui; max-width: 400px; margin: 100px auto; text-align: center; color: #111; }
+      </style>
+    </head>
+    <body>
+      <h1>Unsubscribed</h1>
+      <p>You won't receive more emails from Atomic Bot.</p>
+    </body>
+    </html>
+  `);
 });
 
 // Privacy страница
