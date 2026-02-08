@@ -55,7 +55,7 @@ app.post('/webhook', async (req, res) => {
                 <!-- Logo -->
                 <tr>
                     <td style="padding: 48px 40px 32px; text-align: center; background-color: #1a1a1a;">
-                        <img src="https://atomicbot.ai/images/atomic-logo.png" alt="Atomic Bot" style="height: 48px; width: auto; display: block; margin: 0 auto;">
+                        <img src="https://cdn.prod.website-files.com/6981cca3fe2c3f562a2ad751/6988e3fa37946578994d5268_Vector.png" alt="Atomic Bot" style="height: 48px; width: auto; display: block; margin: 0 auto;">
                     </td>
                 </tr>
 
@@ -95,12 +95,12 @@ app.post('/webhook', async (req, res) => {
                             <tr>
                                 <td style="padding: 0 12px;">
                                     <a href="https://x.com/atomicbot_ai" style="display: inline-block; text-decoration: none;">
-                                        <img src="https://atomicbot.ai/images/icon-x.png" alt="X" style="width: 24px; height: 24px; display: block;">
+                                        <img src="https://cdn.prod.website-files.com/6981cca3fe2c3f562a2ad751/6988e4c432684aa70c924ff6_twitter.png" alt="X" style="width: 24px; height: 24px; display: block;">
                                     </a>
                                 </td>
                                 <td style="padding: 0 12px;">
                                     <a href="https://discord.gg/r9SPcKKB" style="display: inline-block; text-decoration: none;">
-                                        <img src="https://atomicbot.ai/images/icon-discord.png" alt="Discord" style="width: 24px; height: 24px; display: block;">
+                                        <img src="https://cdn.prod.website-files.com/6981cca3fe2c3f562a2ad751/6988e4c62780fca60c8c332a_discord.png" alt="Discord" style="width: 24px; height: 24px; display: block;">
                                     </a>
                                 </td>
                             </tr>
