@@ -52,13 +52,19 @@ app.post('/webhook', async (req, res) => {
         .email-bg { background-color: #2C2C2C !important; }
         .card-bg { background-color: #1E1E1E !important; }
         .footer-bg { background-color: #1A1A1A !important; }
+        .border-dark { border-color: #3a3a3a !important; }
+        .text-title { color: #ffffff !important; }
+        .text-body { color: #a0a0a0 !important; }
+        .text-footer { color: #666666 !important; }
+        .text-sep { color: #333333 !important; }
+        .link-footer { color: #666666 !important; }
       }
     </style>
   </head>
   <body style="margin:0;padding:0;background-color:#ffffff;">
 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" class="email-bg" style="background-color: #ffffff;">
     <tr>
-        <td style="padding: 40px 20px;">
+        <td style="padding: 40px 20px;" class="email-bg">
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" class="card-bg" style="max-width: 600px; margin: 0 auto; background-color: #2C2C2C; border-radius: 8px; overflow: hidden; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
                 <tr>
                     <td style="padding: 48px 40px 32px; text-align: center;" class="card-bg">
@@ -66,29 +72,29 @@ app.post('/webhook', async (req, res) => {
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 0 40px 24px; text-align: center;">
-                        <h1 style="margin: 0; font-size: 36px; font-weight: 700; color: #ffffff; line-height: 1.3; letter-spacing: -0.02em;">
+                    <td style="padding: 0 40px 24px; text-align: center;" class="card-bg">
+                        <h1 class="text-title" style="margin: 0; font-size: 36px; font-weight: 700; color: #ffffff; line-height: 1.3; letter-spacing: -0.02em;">
                             Early access<br>confirmed
                         </h1>
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 0 40px 16px; text-align: center;">
-                        <p style="margin: 0; font-size: 18px; line-height: 1.6; color: #a0a0a0; font-weight: 400;">
+                    <td style="padding: 0 40px 16px; text-align: center;" class="card-bg">
+                        <p class="text-body" style="margin: 0; font-size: 18px; line-height: 1.6; color: #a0a0a0; font-weight: 400;">
                             You're on the early access list.
                         </p>
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 0 40px 40px; text-align: center;">
-                        <p style="margin: 0; font-size: 18px; line-height: 1.6; color: #a0a0a0; font-weight: 400;">
+                    <td style="padding: 0 40px 40px; text-align: center;" class="card-bg">
+                        <p class="text-body" style="margin: 0; font-size: 18px; line-height: 1.6; color: #a0a0a0; font-weight: 400;">
                             We'll email you as soon as your invite is ready.
                         </p>
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 32px 40px; text-align: center; border-top: 1px solid #3a3a3a;">
-                        <p style="margin: 0 0 20px 0; font-size: 16px; line-height: 1.6; color: #a0a0a0;">
+                    <td style="padding: 32px 40px; text-align: center; border-top: 1px solid #3a3a3a;" class="card-bg border-dark">
+                        <p class="text-body" style="margin: 0 0 20px 0; font-size: 16px; line-height: 1.6; color: #a0a0a0;">
                             Join our community
                         </p>
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 auto;">
@@ -109,16 +115,16 @@ app.post('/webhook', async (req, res) => {
                 </tr>
                 <tr>
                     <td style="padding: 32px 40px; text-align: center; background-color: #242424;" class="footer-bg">
-                        <p style="margin: 0 0 16px 0; font-size: 13px; line-height: 1.6; color: #666666;">
+                        <p class="text-footer" style="margin: 0 0 16px 0; font-size: 13px; line-height: 1.6; color: #666666;">
                             If you didn't request early access, you can safely ignore this email.
                         </p>
-                        <p style="margin: 0 0 16px 0; font-size: 13px; line-height: 1.6; color: #666666;">
+                        <p class="text-footer" style="margin: 0 0 16px 0; font-size: 13px; line-height: 1.6; color: #666666;">
                             &copy; 2026 Atomic Bot
                         </p>
                         <p style="margin: 0; font-size: 13px; line-height: 1.6;">
-                            <a href="${process.env.BASE_URL}/unsubscribe?email=${encodeURIComponent(email)}" style="color: #666666; text-decoration: underline;">Unsubscribe</a>
-                            <span style="color: #333333;"> &bull; </span>
-                            <a href="https://atomicbot.ai/terms" style="color: #666666; text-decoration: underline;">Terms of Service</a>
+                            <a class="link-footer" href="${process.env.BASE_URL}/unsubscribe?email=${encodeURIComponent(email)}" style="color: #666666; text-decoration: underline;">Unsubscribe</a>
+                            <span class="text-sep" style="color: #333333;"> &bull; </span>
+                            <a class="link-footer" href="https://atomicbot.ai/terms" style="color: #666666; text-decoration: underline;">Terms of Service</a>
                         </p>
                     </td>
                 </tr>
