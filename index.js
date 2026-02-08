@@ -4,6 +4,8 @@ import { Resend } from 'resend';
 const app = express();
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+const AUDIENCE_ID = process.env.RESEND_AUDIENCE_ID;
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -13,8 +15,8 @@ const unsubscribed = new Set();
 app.post('/webhook', async (req, res) => {
   console.log('Получен webhook:', req.body);
 
-const { payload } = req.body;
-const email = payload.data.Email;
+  const { payload } = req.body;
+  const email = payload.data.Email;
 
   if (!email) {
     return res.status(400).json({ error: 'Email обязателен' });
@@ -27,72 +29,106 @@ const email = payload.data.Email;
   }
 
   try {
+    // Добавляем контакт в сегмент waitlist users
+    if (AUDIENCE_ID) {
+      try {
+        const contactResult = await resend.contacts.create({
+          email,
+          audienceId: AUDIENCE_ID,
+        });
+        console.log('Контакт добавлен в audience:', contactResult);
+      } catch (contactError) {
+        console.error('Ошибка добавления контакта:', contactError);
+      }
+    }
+
     const { data, error } = await resend.emails.send({
       from: 'Atomic Bot <welcome@atomicbot.ai>',
       to: email,
-      subject: '✅ +1 Atomic Bot! You’re on the early access list.',
+      subject: "✅ +1 Atomic Bot! You're on the early access list.",
       html: `
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="color-scheme" content="light only" />
-    <title>Atomic Bot — Early Access</title>
-  </head>
-  <body style="margin:0;padding:0;background:#ffffff;">
-    <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">
-      You're on the early access list. We'll email you when your invite is ready.
-    </div>
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#ffffff;">
-      <tr>
-        <td align="center" style="padding:48px 16px;">
-          <table role="presentation" width="620" cellspacing="0" cellpadding="0" border="0" style="width:100%;max-width:620px;">
-            <tr>
-              <td style="padding:0 2px 18px 2px;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:#111827;">
-                <div style="font-size:12px;letter-spacing:0.18em;text-transform:uppercase;opacity:0.85;">
-                  ATOMIC BOT
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:0 2px;">
-                <div style="font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:#111827;">
-                  <div style="font-size:22px;line-height:1.25;margin:0 0 10px 0;font-weight:750;">
-                    Early access confirmed
-                  </div>
-                  <div style="font-size:14px;line-height:1.8;color:#374151;margin:0 0 22px 0;">
-                    You're on the early access list.<br />
-                    We'll email you as soon as your invite is ready.
-                  </div>
-                  <div style="font-size:13px;line-height:1.7;color:#6b7280;margin:0 0 6px 0;">
-                    Keep in touch:
-                  </div>
-                  <div style="font-size:14px;line-height:1.7;color:#111827;margin:0 0 28px 0;">
-                    <a href="https://x.com/atomicbot_ai" style="color:#111827;text-decoration:underline;">X (Twitter)</a>
-                  </div>
-                  <div style="border-top:1px solid #e5e7eb;padding-top:14px;font-size:12px;line-height:1.6;color:#9ca3af;">
-                    If you didn't request early access, you can ignore this email.
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:18px 2px 0 2px;">
-                <div style="font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:#9ca3af;font-size:12px;line-height:1.6;">
-                  © Atomic Bot · <br />
-                  <a href="${process.env.BASE_URL}/unsubscribe?email=${encodeURIComponent(email)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe</a>
-                  <span style="color:#d1d5db;"> · </span>
-                  <a href="http://atomicbot.ai/terms-of-service" style="color:#9ca3af;text-decoration:underline;">Privacy</a>
-                </div>
-              </td>
-            </tr>
-          </table>
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #0a0a0a;">
+    <tr>
+        <td style="padding: 40px 20px;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; margin: 0 auto; background-color: #1a1a1a; border-radius: 8px; overflow: hidden; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+
+                <!-- Logo -->
+                <tr>
+                    <td style="padding: 48px 40px 32px; text-align: center; background-color: #1a1a1a;">
+                        <img src="https://atomicbot.ai/images/atomic-logo.png" alt="Atomic Bot" style="height: 48px; width: auto; display: block; margin: 0 auto;">
+                    </td>
+                </tr>
+
+                <!-- Heading -->
+                <tr>
+                    <td style="padding: 0 40px 24px; text-align: center;">
+                        <h1 style="margin: 0; font-size: 36px; font-weight: 700; color: #ffffff; line-height: 1.3; letter-spacing: -0.02em;">
+                            Early access<br>confirmed
+                        </h1>
+                    </td>
+                </tr>
+
+                <!-- Body text -->
+                <tr>
+                    <td style="padding: 0 40px 16px; text-align: center;">
+                        <p style="margin: 0; font-size: 18px; line-height: 1.6; color: #a0a0a0; font-weight: 400;">
+                            You're on the early access list.
+                        </p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding: 0 40px 40px; text-align: center;">
+                        <p style="margin: 0; font-size: 18px; line-height: 1.6; color: #a0a0a0; font-weight: 400;">
+                            We'll email you as soon as your invite is ready.
+                        </p>
+                    </td>
+                </tr>
+
+                <!-- Social links -->
+                <tr>
+                    <td style="padding: 32px 40px; text-align: center; border-top: 1px solid #2a2a2a;">
+                        <p style="margin: 0 0 20px 0; font-size: 16px; line-height: 1.6; color: #a0a0a0;">
+                            Join our community
+                        </p>
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 auto;">
+                            <tr>
+                                <td style="padding: 0 12px;">
+                                    <a href="https://x.com/atomicbot_ai" style="display: inline-block; text-decoration: none;">
+                                        <img src="https://atomicbot.ai/images/icon-x.png" alt="X" style="width: 24px; height: 24px; display: block;">
+                                    </a>
+                                </td>
+                                <td style="padding: 0 12px;">
+                                    <a href="https://discord.gg/r9SPcKKB" style="display: inline-block; text-decoration: none;">
+                                        <img src="https://atomicbot.ai/images/icon-discord.png" alt="Discord" style="width: 24px; height: 24px; display: block;">
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                    <td style="padding: 32px 40px; text-align: center; background-color: #141414;">
+                        <p style="margin: 0 0 16px 0; font-size: 13px; line-height: 1.6; color: #666666;">
+                            If you didn't request early access, you can safely ignore this email.
+                        </p>
+                        <p style="margin: 0 0 16px 0; font-size: 13px; line-height: 1.6; color: #666666;">
+                            &copy; 2026 Atomic Bot
+                        </p>
+                        <p style="margin: 0; font-size: 13px; line-height: 1.6;">
+                            <a href="${process.env.BASE_URL}/unsubscribe?email=${encodeURIComponent(email)}" style="color: #666666; text-decoration: underline;">Unsubscribe</a>
+                            <span style="color: #333333;"> &bull; </span>
+                            <a href="https://atomicbot.ai/terms" style="color: #666666; text-decoration: underline;">Terms of Service</a>
+                        </p>
+                    </td>
+                </tr>
+
+            </table>
         </td>
-      </tr>
-    </table>
-  </body>
-</html>
+    </tr>
+</table>
       `
     });
 
