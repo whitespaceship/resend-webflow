@@ -39,97 +39,6 @@ app.post('/webhook', async (req, res) => {
       to: email,
       subject: "✅ +1 Atomic Bot! You're on the early access list.",
       html: `
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="color-scheme" content="light only" />
-    <title>Atomic Bot — Early Access</title>
-  </head>
-  <body style="margin:0;padding:0;background:#ffffff;">
-    <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">
-      You're on the early access list. We'll email you when your invite is ready.
-    </div>
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#ffffff;">
-      <tr>
-        <td align="center" style="padding:48px 16px;">
-          <table role="presentation" width="620" cellspacing="0" cellpadding="0" border="0" style="width:100%;max-width:620px;">
-            <tr>
-              <td style="padding:0 2px 18px 2px;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:#111827;">
-                <div style="font-size:12px;letter-spacing:0.18em;text-transform:uppercase;opacity:0.85;">
-                  ATOMIC BOT
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:0 2px;">
-                <div style="font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:#111827;">
-                  <div style="font-size:22px;line-height:1.25;margin:0 0 10px 0;font-weight:750;">
-                    Early access confirmed
-                  </div>
-                  <div style="font-size:14px;line-height:1.8;color:#374151;margin:0 0 22px 0;">
-                    You're on the early access list.<br />
-                    We'll email you as soon as your invite is ready.
-                  </div>
-                  <div style="font-size:13px;line-height:1.7;color:#6b7280;margin:0 0 6px 0;">
-                    Keep in touch:
-                  </div>
-                  <div style="font-size:14px;line-height:1.7;color:#111827;margin:0 0 28px 0;">
-                    <a href="https://x.com/atomicbot_ai" style="color:#111827;text-decoration:underline;">X (Twitter)</a>
-                  </div>
-                  <div style="border-top:1px solid #e5e7eb;padding-top:14px;font-size:12px;line-height:1.6;color:#9ca3af;">
-                    If you didn't request early access, you can ignore this email.
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:18px 2px 0 2px;">
-                <div style="font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:#9ca3af;font-size:12px;line-height:1.6;">
-                  © Atomic Bot · <br />
-                  <a href="${process.env.BASE_URL}/unsubscribe?email=${encodeURIComponent(email)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe</a>
-                  <span style="color:#d1d5db;"> · </span>
-                  <a href="http://atomicbot.ai/terms-of-service" style="color:#9ca3af;text-decoration:underline;">Privacy</a>
-                </div>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-  </body>
-</html>
-      `
-    });
-
-    if (error) {
-      console.error('Ошибка Resend:', error);
-      return res.status(400).json({ error });
-    }
-
-    console.log('Email отправлен:', data);
-    return res.status(200).json({ success: true, id: data.id });
-
-  } catch (error) {
-    console.error('Ошибка сервера:', error);
-    return res.status(500).json({ error: error.message });
-  }
-});
-
-// Тестовый эндпоинт для проверки тёмного шаблона
-app.get('/test-dark', async (req, res) => {
-  const email = req.query.email;
-  if (!email) {
-    return res.status(400).json({ error: 'Укажи ?email=your@email.com' });
-  }
-
-  try {
-    const { data, error } = await resend.emails.send({
-      from: 'Atomic Bot <welcome@atomicbot.ai>',
-      to: email,
-      subject: '[TEST] Dark template preview',
-      html: `
 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #0a0a0a;">
     <tr>
         <td style="padding: 40px 20px;">
@@ -203,10 +112,17 @@ app.get('/test-dark', async (req, res) => {
       `
     });
 
-    if (error) return res.status(400).json({ error });
-    return res.json({ success: true, id: data.id, message: 'Тестовое письмо отправлено' });
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
+    if (error) {
+      console.error('Ошибка Resend:', error);
+      return res.status(400).json({ error });
+    }
+
+    console.log('Email отправлен:', data);
+    return res.status(200).json({ success: true, id: data.id });
+
+  } catch (error) {
+    console.error('Ошибка сервера:', error);
+    return res.status(500).json({ error: error.message });
   }
 });
 
