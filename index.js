@@ -28,7 +28,7 @@ const email = payload.data.Email;
 
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Atomic Bot Team <team@atomicbot.ai>',
+      from: 'Atomic Bot <welcome@atomicbot.ai>',
       to: email,
       subject: '✅ +1 Atomic Bot! You’re on the early access list.',
       html: `
@@ -156,7 +156,7 @@ app.get('/privacy', (req, res) => {
       <h1>Privacy Policy</h1>
       <p>We collect your email to send product updates.</p>
       <p>We don't sell or share your data with third parties.</p>
-      <p>Contact: privacy@atomicbot.ai</p>
+      <p>Contact: hello@atomicbot.ai</p>
       <p><small>Last updated: February 2025</small></p>
     </body>
     </html>
