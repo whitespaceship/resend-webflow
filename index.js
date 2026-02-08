@@ -44,22 +44,25 @@ app.post('/webhook', async (req, res) => {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="color-scheme" content="light only" />
-    <meta name="supported-color-schemes" content="light only" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="supported-color-schemes" content="light dark" />
     <style>
-      :root { color-scheme: light only; }
+      :root { color-scheme: light dark; }
       @media (prefers-color-scheme: dark) {
-        .email-bg { background-color: #ffffff !important; }
-        .card-bg { background-color: #2c2c2c !important; }
-        .footer-bg { background-color: #242424 !important; }
+        .email-bg { background-color: #1a1a1a !important; }
+        .card-bg { background-color: #262626 !important; }
+        .footer-bg { background-color: #1e1e1e !important; }
+        .text-white { color: #ffffff !important; }
+        .text-gray { color: #a0a0a0 !important; }
+        .text-footer { color: #666666 !important; }
       }
     </style>
   </head>
-  <body style="margin:0;padding:0;background-color:#ffffff;">
-<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" class="email-bg" style="background-color: #ffffff;">
+  <body style="margin:0;padding:0;background-color:#f2f2f2;">
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" class="email-bg" style="background-color: #f2f2f2;">
     <tr>
         <td style="padding: 40px 20px;">
-            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" class="card-bg" style="max-width: 600px; margin: 0 auto; background-color: #2c2c2c; border-radius: 8px; overflow: hidden; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" class="card-bg" style="max-width: 600px; margin: 0 auto; background-color: #1a1a1a; border-radius: 8px; overflow: hidden; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
                 <tr>
                     <td style="padding: 48px 40px 32px; text-align: center;" class="card-bg">
                         <img src="https://cdn.prod.website-files.com/6981cca3fe2c3f562a2ad751/6988e3fa37946578994d5268_Vector.png" alt="Atomic Bot" style="height: 48px; width: auto; display: block; margin: 0 auto;">
@@ -108,7 +111,7 @@ app.post('/webhook', async (req, res) => {
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 32px 40px; text-align: center; background-color: #242424;" class="footer-bg">
+                    <td style="padding: 32px 40px; text-align: center; background-color: #141414;" class="footer-bg">
                         <p style="margin: 0 0 16px 0; font-size: 13px; line-height: 1.6; color: #666666;">
                             If you didn't request early access, you can safely ignore this email.
                         </p>
