@@ -217,6 +217,28 @@ app.post('/webhook', async (req, res) => {
   }
 });
 
+// Тестовый эндпоинт для проверки тёмного шаблона
+app.get('/test-dark', async (req, res) => {
+  const email = req.query.email;
+  if (!email) {
+    return res.status(400).json({ error: 'Укажи ?email=your@email.com' });
+  }
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: 'Atomic Bot <welcome@atomicbot.ai>',
+      to: email,
+      subject: '[TEST] Dark template preview',
+      html: darkTemplate(email),
+    });
+
+    if (error) return res.status(400).json({ error });
+    return res.json({ success: true, id: data.id, message: 'Тестовое письмо отправлено' });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
 // Страница отписки
 app.get('/unsubscribe', (req, res) => {
   const { email } = req.query;
