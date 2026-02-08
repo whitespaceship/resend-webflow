@@ -4,6 +4,8 @@ import { Resend } from 'resend';
 const app = express();
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+const AUDIENCE_ID = process.env.RESEND_AUDIENCE_ID;
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -13,8 +15,8 @@ const unsubscribed = new Set();
 app.post('/webhook', async (req, res) => {
   console.log('Получен webhook:', req.body);
 
-const { payload } = req.body;
-const email = payload.data.Email;
+  const { payload } = req.body;
+  const email = payload.data.Email;
 
   if (!email) {
     return res.status(400).json({ error: 'Email обязателен' });
@@ -27,10 +29,23 @@ const email = payload.data.Email;
   }
 
   try {
+    // Добавляем контакт в сегмент waitlist users
+    if (AUDIENCE_ID) {
+      try {
+        const contactResult = await resend.contacts.create({
+          email,
+          audienceId: AUDIENCE_ID,
+        });
+        console.log('Контакт добавлен в audience:', contactResult);
+      } catch (contactError) {
+        console.error('Ошибка добавления контакта:', contactError);
+      }
+    }
+
     const { data, error } = await resend.emails.send({
       from: 'Atomic Bot <welcome@atomicbot.ai>',
       to: email,
-      subject: '✅ +1 Atomic Bot! You’re on the early access list.',
+      subject: "✅ +1 Atomic Bot! You're on the early access list.",
       html: `
 <!doctype html>
 <html lang="en">
@@ -113,11 +128,11 @@ const email = payload.data.Email;
 // Страница отписки
 app.get('/unsubscribe', (req, res) => {
   const { email } = req.query;
-  
+
   if (email) {
     unsubscribed.add(email);
     console.log('Отписался:', email);
-    
+
     res.send(`
       <!DOCTYPE html>
       <html>
