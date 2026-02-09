@@ -100,7 +100,7 @@ app.post('/webhook', async (req, res) => {
                                     </a>
                                 </td>
                                 <td style="padding: 0 12px;">
-                                    <a href="https://discord.gg/r9SPcKKB" style="display: inline-block; text-decoration: none;">
+                                    <a href="https://discord.gg/2TXafRV69m" style="display: inline-block; text-decoration: none;">
                                         <img src="https://cdn.prod.website-files.com/6981cca3fe2c3f562a2ad751/6988e4c62780fca60c8c332a_discord.png" alt="Discord" style="width: 30px; height: 30px; display: block;">
                                     </a>
                                 </td>
