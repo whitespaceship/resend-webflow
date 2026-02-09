@@ -48,47 +48,56 @@ app.post('/webhook', async (req, res) => {
     <meta name="supported-color-schemes" content="light dark" />
     <style>
       :root { color-scheme: light dark; }
-      @media (prefers-color-scheme: light) {
-        .email-bg { background-color: #ffffff !important; }
-        .card-bg { background-color: #2C2C2C !important; }
-        .footer-bg { background-color: #242424 !important; }
-        .border-light { border-color: #3a3a3a !important; }
+      /* Gmail blend mode fix: preserves white text when Gmail inverts */
+      u + .body .gbl-s { background:#000; mix-blend-mode:screen; }
+      u + .body .gbl-d { background:#000; mix-blend-mode:difference; }
+      /* Apple Mail / Outlook dark mode */
+      @media (prefers-color-scheme: dark) {
+        .email-bg { background-color: #2C2C2C !important; background-image: linear-gradient(#2C2C2C,#2C2C2C) !important; }
+        .card-bg { background-color: #1E1E1E !important; background-image: linear-gradient(#1E1E1E,#1E1E1E) !important; }
+        .footer-bg { background-color: #1A1A1A !important; background-image: linear-gradient(#1A1A1A,#1A1A1A) !important; }
       }
+      /* Outlook dark mode */
+      [data-ogsb] .email-bg { background-color: #2C2C2C !important; }
+      [data-ogsb] .card-bg { background-color: #1E1E1E !important; }
+      [data-ogsb] .footer-bg { background-color: #1A1A1A !important; }
     </style>
   </head>
-  <body style="margin:0;padding:0;background-color:#2C2C2C;">
-<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" class="email-bg" style="background-color: #2C2C2C;">
+  <body class="body" style="margin:0;padding:0;background-color:#FFFFFE;">
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" bgcolor="#FFFFFE" class="email-bg" style="background-color:#FFFFFE; background-image:linear-gradient(#FFFFFE,#FFFFFE);">
     <tr>
-        <td style="padding: 40px 20px;" class="email-bg">
-            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" class="card-bg" style="max-width: 600px; margin: 0 auto; background-color: #1E1E1E; border-radius: 8px; overflow: hidden; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+        <td style="padding: 40px 20px;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" bgcolor="#2C2C2C" class="card-bg" style="max-width: 600px; margin: 0 auto; background-color: #2C2C2C; background-image: linear-gradient(#2C2C2C,#2C2C2C); border-radius: 8px; overflow: hidden; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
                 <tr>
-                    <td style="padding: 48px 40px 32px; text-align: center;" class="card-bg">
+                    <td style="padding: 48px 40px 32px; text-align: center;">
                         <img src="https://cdn.prod.website-files.com/6981cca3fe2c3f562a2ad751/6988e3fa37946578994d5268_Vector.png" alt="Atomic Bot" style="height: 48px; width: auto; display: block; margin: 0 auto;">
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 0 40px 24px; text-align: center;" class="card-bg">
-                        <h1 style="margin: 0; font-size: 36px; font-weight: 700; color: #ffffff; line-height: 1.3; letter-spacing: -0.02em;">
+                    <td style="padding: 0 40px 24px; text-align: center;">
+                        <div class="gbl-s"><div class="gbl-d">
+                        <h1 style="margin: 0; font-size: 36px; font-weight: 700; color: #FFFFFE; line-height: 1.3; letter-spacing: -0.02em;">
                             Early access<br>confirmed
                         </h1>
+                        </div></div>
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 0 40px 16px; text-align: center;" class="card-bg">
+                    <td style="padding: 0 40px 16px; text-align: center;">
                         <p style="margin: 0; font-size: 18px; line-height: 1.6; color: #a0a0a0; font-weight: 400;">
                             You're on the early access list.
                         </p>
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 0 40px 40px; text-align: center;" class="card-bg">
+                    <td style="padding: 0 40px 40px; text-align: center;">
                         <p style="margin: 0; font-size: 18px; line-height: 1.6; color: #a0a0a0; font-weight: 400;">
                             We'll email you as soon as your invite is ready.
                         </p>
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 32px 40px; text-align: center; border-top: 1px solid #3a3a3a;" class="card-bg border-light">
+                    <td style="padding: 32px 40px; text-align: center; border-top: 1px solid #3a3a3a;">
                         <p style="margin: 0 0 20px 0; font-size: 16px; line-height: 1.6; color: #a0a0a0;">
                             Join our community
                         </p>
@@ -109,7 +118,7 @@ app.post('/webhook', async (req, res) => {
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 32px 40px; text-align: center; background-color: #1A1A1A;" class="footer-bg">
+                    <td bgcolor="#242424" class="footer-bg" style="padding: 32px 40px; text-align: center; background-color: #242424; background-image: linear-gradient(#242424,#242424);">
                         <p style="margin: 0 0 16px 0; font-size: 13px; line-height: 1.6; color: #666666;">
                             If you didn't request early access, you can safely ignore this email.
                         </p>
